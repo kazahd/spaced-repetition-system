@@ -4,12 +4,16 @@ from app.db.database import engine, Base
 
 from app.models import *
 
+from app.api.auth import router as auth_router
+
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Spaced Repetition System API"
 )
+
+app.include_router(auth_router)
 
 
 @app.get("/")
