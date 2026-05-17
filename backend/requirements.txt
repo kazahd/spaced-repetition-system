@@ -1,18 +1,24 @@
+# Core
 fastapi
 uvicorn[standard]
 
+# Database
 sqlalchemy
 psycopg2-binary
 alembic
 
+# Validation & settings
 pydantic
 pydantic-settings
 email-validator
 
+# Auth
 python-jose[cryptography]
 passlib[bcrypt]
 
+# Env
 python-dotenv
 
+# Testing
 pytest
 httpx
