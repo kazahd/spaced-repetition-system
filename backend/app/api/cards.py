@@ -17,6 +17,7 @@ from app.schemas.card import (
 
 from app.core.dependencies import get_current_user
 
+from datetime import date
 
 router = APIRouter(
     prefix="/cards",
@@ -63,6 +64,26 @@ def create_card(
 
     return card
 
+@router.get("/due")
+def get_due_cards(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    cards = (
+        db.query(Card)
+        .join(Card.deck)
+        .filter(
+            Deck.owner_id == current_user.id,
+            (
+                (Card.next_review <= date.today())
+                |
+                (Card.next_review == None)
+            )
+        )
+        .all()
+    )
+
+    return cards
 
 @router.get("/{deck_id}", response_model=list[CardResponse])
 def get_cards(
@@ -82,3 +103,4 @@ def get_cards(
         )
 
     return deck.cards
+
