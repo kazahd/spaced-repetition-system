@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 
-from app.db.database import Base
+from app.db.base_class import Base
 
 
 class Deck(Base):
@@ -12,8 +11,20 @@ class Deck(Base):
 
     title = Column(String, nullable=False)
 
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    description = Column(String, nullable=True)
 
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    owner_id = Column(
+        Integer,
+        ForeignKey("users.id")
+    )
 
-    cards = relationship("Card", back_populates="deck")
+    owner = relationship(
+        "User",
+        back_populates="decks"
+    )
+
+    cards = relationship(
+        "Card",
+        back_populates="deck",
+        cascade="all, delete"
+    )
