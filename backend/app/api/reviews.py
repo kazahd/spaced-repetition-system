@@ -6,6 +6,7 @@ from app.db.session import get_db
 
 from app.models.card import Card
 from app.models.user import User
+from app.models.review import Review
 
 from app.schemas.review import ReviewRequest
 
@@ -37,12 +38,23 @@ def review_card(
             detail="Card not found"
         )
 
+    # обновляем карточку по SM-2
     update_card_schedule(
         card,
         review.quality
     )
 
+    # сохраняем историю review
+    review_log = Review(
+        user_id=current_user.id,
+        card_id=card.id,
+        quality=review.quality
+    )
+
+    db.add(review_log)
+
     db.commit()
+
     db.refresh(card)
 
     return {

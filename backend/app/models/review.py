@@ -1,5 +1,8 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime
+from sqlalchemy import (Column, Integer, ForeignKey, DateTime)
+
 from sqlalchemy.sql import func
+
+from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
@@ -10,8 +13,11 @@ class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     user_id = Column(Integer, ForeignKey("users.id"))
+
     card_id = Column(Integer, ForeignKey("cards.id"))
 
     quality = Column(Integer)
 
     reviewed_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    card = relationship("Card", back_populates="reviews")

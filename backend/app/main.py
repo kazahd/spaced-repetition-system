@@ -11,6 +11,7 @@ from app.api.users import router as users_router
 from app.api.decks import router as decks_router
 from app.api.cards import router as cards_router
 from app.api.reviews import router as reviews_router
+from app.api.stats import router as stats_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -23,6 +24,7 @@ app.include_router(users_router)
 app.include_router(decks_router)
 app.include_router(cards_router)
 app.include_router(reviews_router)
+app.include_router(stats_router)
 
 @app.get("/")
 def root():

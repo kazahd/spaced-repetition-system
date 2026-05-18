@@ -22,3 +22,5 @@ class Card(Base):
     next_review = Column(Date)
 
     deck = relationship("Deck", back_populates="cards")
+
+    reviews = relationship("Review", back_populates="card", cascade="all, delete")

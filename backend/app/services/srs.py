@@ -2,7 +2,6 @@ from datetime import date, timedelta
 
 from app.models.card import Card
 
-
 def update_card_schedule(card: Card, quality: int):
     """
     SM-2 algorithm
@@ -25,7 +24,7 @@ def update_card_schedule(card: Card, quality: int):
             )
 
         card.repetitions += 1
-
+        
     card.ease_factor = max(
         1.3,
         card.ease_factor + (
