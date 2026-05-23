@@ -104,3 +104,47 @@ def get_cards(
 
     return deck.cards
 
+@router.put("/{card_id}", response_model=CardResponse)
+def update_card(
+    card_id: int,
+    card_data: CardCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Обновить карточку (только владелец колоды)"""
+    card = db.query(Card).join(Card.deck).filter(
+        Card.id == card_id,
+        Deck.owner_id == current_user.id
+    ).first()
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    
+    card.question = card_data.question
+    card.answer = card_data.answer
+    
+    db.commit()
+    db.refresh(card)
+    
+    return card
+
+
+@router.delete("/{card_id}")
+def delete_card(
+    card_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Удалить карточку (только владелец колоды)"""
+    card = db.query(Card).join(Card.deck).filter(
+        Card.id == card_id,
+        Deck.owner_id == current_user.id
+    ).first()
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+    
+    db.delete(card)
+    db.commit()
+    
+    return {"message": "Card deleted successfully"}

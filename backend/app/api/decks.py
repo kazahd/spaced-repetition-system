@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -49,3 +49,48 @@ def get_my_decks(
     ).all()
 
     return decks
+
+@router.put("/{deck_id}", response_model=DeckResponse)
+def update_deck(
+    deck_id: int,
+    deck_data: DeckCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Обновить колоду (только владелец)"""
+    deck = db.query(Deck).filter(
+        Deck.id == deck_id,
+        Deck.owner_id == current_user.id
+    ).first()
+    
+    if not deck:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    
+    deck.title = deck_data.title
+    deck.description = deck_data.description
+    
+    db.commit()
+    db.refresh(deck)
+    
+    return deck
+
+
+@router.delete("/{deck_id}")
+def delete_deck(
+    deck_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Удалить колоду (только владелец, каскадно удаляет карточки)"""
+    deck = db.query(Deck).filter(
+        Deck.id == deck_id,
+        Deck.owner_id == current_user.id
+    ).first()
+    
+    if not deck:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    
+    db.delete(deck)
+    db.commit()
+    
+    return {"message": "Deck deleted successfully"}

@@ -17,6 +17,11 @@ class UserResponse(BaseModel):
     username: str
     email: EmailStr
     role: str
+    is_blocked: bool = False
 
     class Config:
         from_attributes = True
+
+
+class UserBlockRequest(BaseModel):
+    reason: str | None = None
