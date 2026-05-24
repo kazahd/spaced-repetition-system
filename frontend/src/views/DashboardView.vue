@@ -115,7 +115,7 @@
           {{ deck.description || 'Нет описания' }}
         </p>
         <div style="display: flex; gap: 8px; font-size: 12px; color: #999; margin-top: 8px">
-          <span>📄 Карточки: {{ deck.card_count || 0 }}</span>
+          <span>📄 Карточки: {{ deck.cards?.length || 0 }}</span>
         </div>
       </div>
 
