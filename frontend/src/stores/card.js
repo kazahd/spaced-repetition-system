@@ -34,6 +34,11 @@ export const useCardStore = defineStore('card', {
       }
     },
 
+    async submitReview(cardId, quality) {
+      const response = await api.post(`/reviews/${cardId}`, { quality })
+      return response.data
+    },
+
     async createCard(deckId, cardData) {
       const response = await api.post('/cards/', cardData, {
         params: { deck_id: deckId }
