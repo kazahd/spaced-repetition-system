@@ -21,12 +21,17 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-  path: '/decks/:id',
-  component: () => import('../views/DeckDetailView.vue'),
-  meta: { requiresAuth: true }
+    path: '/decks/:id',
+    component: () => import('../views/DeckDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/review',
+    component: () => import('../views/ReviewView.vue'),
+    meta: { requiresAuth: true }
   }
 ]
-    
+
 const router = createRouter({
   history: createWebHistory(),
   routes
