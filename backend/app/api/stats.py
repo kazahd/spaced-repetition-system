@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, time, date
 
 from fastapi import APIRouter, Depends
 
@@ -55,12 +55,11 @@ def get_stats(
     )
 
     # повторения сегодня
+    today_start = datetime.combine(date.today(), time.min)
+    today_end = datetime.combine(date.today(), time.max)
     reviews_today = (
         db.query(Review)
-        .filter(
-            Review.user_id == current_user.id,
-            func.date(Review.reviewed_at) == date.today()
-        )
+        .filter(Review.reviewed_at.between(today_start, today_end))
         .count()
     )
 

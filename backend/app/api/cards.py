@@ -17,7 +17,6 @@ from app.schemas.card import (
 
 from app.core.dependencies import get_current_user
 
-from datetime import date
 
 router = APIRouter(
     prefix="/cards",

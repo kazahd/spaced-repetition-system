@@ -5,13 +5,11 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 
 from app.models.card import Card
+from app.models.deck import Deck
 from app.models.user import User
 from app.models.review import Review
-
 from app.schemas.review import ReviewRequest
-
 from app.core.dependencies import get_current_user
-
 from app.services.srs import update_card_schedule
 
 
@@ -28,8 +26,9 @@ def review_card(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    card = db.query(Card).filter(
-        Card.id == card_id
+    card = db.query(Card).join(Card.deck).filter(
+        Card.id == card_id,
+        Deck.owner_id == current_user.id
     ).first()
 
     if not card:
