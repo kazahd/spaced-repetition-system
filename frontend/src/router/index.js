@@ -39,6 +39,11 @@ const routes = [
     path: '/stats',
     component: () => import('../views/StatisticsView.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin',
+    component: () => import('../views/AdminView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
   }
 ]
 
@@ -48,17 +53,44 @@ const router = createRouter({
 })
 
 // Защита маршрутов
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const token = localStorage.getItem('token')
   const isAuthenticated = !!token
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
-  } else if (to.meta.requiresGuest && isAuthenticated) {
-    next('/')
-  } else {
-    next()
+    return
   }
+
+  if (to.meta.requiresGuest && isAuthenticated) {
+    next('/')
+    return
+  }
+
+  // Проверка на админа
+  if (to.meta.requiresAdmin && isAuthenticated) {
+    try {
+      // Получаем пользователя через store
+      const { useAuthStore } = await import('../stores/auth')
+      const authStore = useAuthStore()
+      
+      if (!authStore.user) {
+        await authStore.fetchUser()
+      }
+      
+      if (authStore.isAdmin) {
+        next()
+      } else {
+        next('/')
+      }
+    } catch (error) {
+      console.error('Admin check error:', error)
+      next('/login')
+    }
+    return
+  }
+
+  next()
 })
 
 export default router
