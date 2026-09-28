@@ -175,9 +175,9 @@ const authStore = useAuthStore()
 
 const activeTab = ref('users')
 const tabs = [
-  { key: 'users', label: '👥 Пользователи' },
-  { key: 'logs', label: '📋 Журнал действий' },
-  { key: 'stats', label: '📊 Системная статистика' }
+  { key: 'users', label: 'Пользователи' },
+  { key: 'logs', label: 'Журнал действий' },
+  { key: 'stats', label: 'Системная статистика' }
 ]
 
 onMounted(async () => {

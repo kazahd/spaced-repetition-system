@@ -48,6 +48,20 @@
           <button @click="deleteCard(card.id)" style="padding: 4px 12px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer">
             🗑️
           </button>
+          <button
+  @click="toggleCard(card)"
+  :style="{
+    padding: '4px 12px',
+    backgroundColor: card.is_active ? '#95a5a6' : '#2ecc71',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer'
+  }"
+  :title="card.is_active ? 'Выключить карточку' : 'Включить карточку'"
+>
+  {{ card.is_active ? '⏸️' : '▶️' }}
+</button>
         </div>
       </div>
 
@@ -199,5 +213,9 @@ const deleteCard = async (cardId) => {
   if (confirm('Удалить карточку?')) {
     await cardStore.deleteCard(cardId)
   }
+}
+
+const toggleCard = async (card) => {
+  await cardStore.toggleCard(card.id)
 }
 </script>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Date, Boolean
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -20,6 +20,8 @@ class Card(Base):
     ease_factor = Column(Float, default=2.5)
 
     next_review = Column(Date)
+
+    is_active = Column(Boolean, default=True)
 
     deck = relationship("Deck", back_populates="cards")
 

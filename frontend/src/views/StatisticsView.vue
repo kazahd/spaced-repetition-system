@@ -5,7 +5,7 @@
       ← Назад
     </button>
 
-    <h1 style="margin-bottom: 24px">📊 Статистика</h1>
+    <h1 style="margin-bottom: 24px">Статистика</h1>
 
     <!-- Загрузка -->
     <div v-if="statsStore.loading" style="text-align: center; padding: 60px">

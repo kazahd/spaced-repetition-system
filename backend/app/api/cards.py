@@ -73,6 +73,7 @@ def get_due_cards(
         .join(Card.deck)
         .filter(
             Deck.owner_id == current_user.id,
+            Card.is_active == True, 
             (
                 (Card.next_review <= date.today())
                 |
@@ -147,3 +148,24 @@ def delete_card(
     db.commit()
     
     return {"message": "Card deleted successfully"}
+
+@router.patch("/{card_id}/toggle", response_model=CardResponse)
+def toggle_card(
+    card_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Включить/выключить карточку"""
+    card = db.query(Card).join(Card.deck).filter(
+        Card.id == card_id,
+        Deck.owner_id == current_user.id
+    ).first()
+
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+
+    card.is_active = not card.is_active
+    db.commit()
+    db.refresh(card)
+
+    return card

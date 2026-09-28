@@ -57,6 +57,13 @@ export const useCardStore = defineStore('card', {
     async deleteCard(cardId) {
       await api.delete(`/cards/${cardId}`)
       this.cards = this.cards.filter(c => c.id !== cardId)
-    }
+    },
+
+  async toggleCard(cardId) {
+    const response = await api.patch(`/cards/${cardId}/toggle`)
+    const index = this.cards.findIndex(c => c.id === cardId)
+    if (index !== -1) this.cards[index] = response.data
+    return response.data
+}
   }
 })

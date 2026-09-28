@@ -7,7 +7,7 @@
 
     <!-- Если нет карточек -->
     <div v-if="dueCards.length === 0 && !loading" style="text-align: center; padding: 60px">
-      <h2>🎉 Отлично!</h2>
+      <h2>Отлично!</h2>
       <p>На сегодня нет карточек для повторения.</p>
       <button @click="router.push('/')" style="padding: 8px 16px; margin-top: 16px; cursor: pointer">
         На главную
@@ -31,7 +31,10 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         margin-bottom: 20px
       ">
-        <h2 style="margin: 0 0 20px 0; font-size: 24px">{{ currentCard.question }}</h2>
+        <!-- ★ ВОПРОС с поддержкой переносов ★ -->
+        <h2 style="margin: 0 0 20px 0; font-size: 24px; white-space: pre-wrap;">
+          {{ currentCard.question }}
+        </h2>
 
         <!-- Поле ввода ответа (режим вопроса) -->
         <div v-if="!showAnswer">
@@ -65,9 +68,14 @@
             text-align: left
           ">
             <div><strong>Правильный ответ:</strong></div>
-            <div style="margin-top: 8px">{{ currentCard.answer }}</div>
+            <!-- ★ ПРАВИЛЬНЫЙ ОТВЕТ с поддержкой переносов ★ -->
+            <div style="margin-top: 8px; white-space: pre-wrap;">
+              {{ currentCard.answer }}
+            </div>
+            <!-- ★ ВАШ ОТВЕТ с поддержкой переносов ★ -->
             <div v-if="userAnswer" style="margin-top: 12px">
-              <strong>Ваш ответ:</strong> {{ userAnswer }}
+              <strong>Ваш ответ:</strong>
+              <span style="white-space: pre-wrap;">{{ userAnswer }}</span>
             </div>
           </div>
 

@@ -13,7 +13,7 @@
           cursor: pointer;
           font-size: 14px
         ">
-          📖 Повторение
+          Повторение
         </button>
         <button @click="goToStats" style="
           padding: 8px 16px;
@@ -24,7 +24,7 @@
           cursor: pointer;
           font-size: 14px
         ">
-          📊 Статистика
+          Статистика
         </button>
         <button v-if="authStore.isAdmin" @click="goToAdmin" style="
           padding: 8px 16px;
